@@ -1,12 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-// import { config } from 'dotenv';
-
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
-  // config();
-
   const app = await NestFactory.create(AppModule);
+
+  // swagger config
+  const config = new DocumentBuilder()
+    .addBearerAuth()
+    .setTitle('Nest Template')
+    .setDescription('')
+    .setVersion('1.0')
+    .build();
 
   // validation
   app.useGlobalPipes(
@@ -23,6 +28,9 @@ async function bootstrap() {
   app.enableCors();
 
   app.setGlobalPrefix('api');
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api-docs', app, document);
 
   await app.listen(appPort, () => {
     console.log(`You Applications is Working ->${appPort}<-`);
