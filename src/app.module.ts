@@ -11,12 +11,37 @@ import { HealthCheckModule } from './modules/healthcheck/healthcheck.module';
 @Module({
   imports: [
     // config
+    // Config Module
+    // Docs -> https://docs.nestjs.com/techniques/configuration
     ConfigModule.forRoot({ isGlobal: true }),
+
+    // TypeOrm Module
+    // Docs -> https://docs.nestjs.com/recipes/sql-typeorm
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
 
-    // modules
+    // Global modules
     SimpleModule,
     HealthCheckModule,
+
+    // your can create route just like angular
+    // Router Module
+    // Docs -> https://docs.nestjs.com/recipes/router-module
+    // RouterModule.register([
+    //   {
+    //     path: 'admin',
+    //     module: AdminModule,
+    //     children: [
+    //       {
+    //         path: 'dashboard',
+    //         module: DashboardModule,
+    //       },
+    //       {
+    //         path: 'metrics',
+    //         module: MetricsModule,
+    //       },
+    //     ],
+    //   },
+    // ])
   ],
   controllers: [AppController],
   providers: [AppService],

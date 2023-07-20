@@ -9,7 +9,7 @@ import {
 import { SimpleService } from './simple.service';
 import { CreateSimpleDto } from './dto/simple.dto';
 
-@Controller('simple')
+@Controller('v1/simple')
 export class SimpleController {
   constructor(private service: SimpleService) {}
 
