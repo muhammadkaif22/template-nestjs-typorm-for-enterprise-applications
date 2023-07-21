@@ -48,13 +48,22 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
         host: process.env.DB_HOST || '',
         port: parseInt(process.env.DB_PORT, 10) || 3306,
         username: process.env.DB_USER || '',
-        database: process.env.DB_DATABASENAME || '',
+        database: process.env.DB_NAME || '',
         password: process.env.DB_PASSWORD || '',
-        synchronize: true,
+        // synchronize: true,
         logging: true,
 
         // entities
+        // entities: [__dirname + '/../**/*.entity.{js,ts}'],
+      };
+    }
+
+    if (process.env.APP_START_DB === 'true') {
+      console.log('condition working');
+      config = {
+        ...config,
         entities: [__dirname + '/../**/*.entity.{js,ts}'],
+        synchronize: true,
       };
     }
 
