@@ -1,17 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { swaggerConfig } from './config';
+import { GlobalExceptionFilter } from './common/filters/globalException';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  // swagger config
-  const config = new DocumentBuilder()
-    .addBearerAuth()
-    .setTitle('Nest Template')
-    .setDescription('')
-    .setVersion('1.0')
-    .build();
 
   // validation
   app.useGlobalPipes(
@@ -20,20 +13,25 @@ async function bootstrap() {
       forbidNonWhitelisted: true, // throw an error is field does not exits in dto
     }),
   );
+  // ******************* Settings *********************
 
-  // app port
-  const appPort = process.env.APP_PORT;
+  // ? app port
+  const backupPort = 8000;
+  const appPort = process.env.PORT || backupPort;
 
-  // enable cors
+  // ? enable cors
   app.enableCors();
 
+  app.useGlobalFilters(new GlobalExceptionFilter());
+
+  // ? global api perfix
   app.setGlobalPrefix('api');
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+  // ? Swagger For Apis Docs
+  swaggerConfig(app);
 
   await app.listen(appPort, () => {
-    console.log(`You Applications is Working ->${appPort}<-`);
+    console.log(`You Applications is live on 👉 Port:${appPort}`);
   });
 }
 bootstrap();
